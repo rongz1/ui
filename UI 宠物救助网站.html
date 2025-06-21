@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #F8E8EE;
+            --secondary-color: #D6E6F2;
+            --accent-color: #FFF6E0;
+            --light-color: #F3EFFF;
+            --blue-color: #D0E6F6;
+            --text-color: #FF6F91;
+            --title-color: #7C3AED;
+            --btn-text-color: #FFB86B;
+        }
+        body {
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 30%, var(--secondary-color) 60%, var(--blue-color) 85%, var(--light-color) 100%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-box {
+            background: var(--light-color);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 48px 36px 36px 36px;
+            max-width: 90vw;
+            width: 350px;
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            color: var(--title-color);
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 24px;
+            letter-spacing: 2px;
+        }
+        input[type="text"] {
+            width: 90%;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 2px solid var(--primary-color);
+            font-size: 1.1rem;
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            margin-bottom: 22px;
+            outline: none;
+            background: #fff;
+            color: var(--text-color);
+            transition: border 0.2s;
+        }
+        input[type="text"]:focus {
+            border: 2.5px solid var(--title-color);
+        }
+        button {
+            background: linear-gradient(90deg, var(--primary-color), var(--blue-color));
+            color: var(--btn-text-color);
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.2rem;
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(255,182,185,0.15);
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+        button:hover {
+            background: linear-gradient(90deg, var(--secondary-color), var(--light-color));
+            color: var(--title-color);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 8px 20px rgba(255,182,185,0.25);
+        }
+        /* 可爱贴纸 */
+        .cat-sticker {
+            position: absolute;
+            left: -30px;
+            top: -30px;
+            width: 60px;
+            height: 60px;
+        }
+        .star-sticker {
+            position: absolute;
+            right: -18px;
+            bottom: -18px;
+            width: 36px;
+            height: 36px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <span class="cat-sticker">
+            <svg viewBox="0 0 64 64" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="32" cy="40" rx="22" ry="18" fill="#FFD6EC"/>
+                <ellipse cx="20" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
+                <ellipse cx="44" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
+                <ellipse cx="32" cy="32" rx="18" ry="16" fill="#fff"/>
+                <ellipse cx="24" cy="34" rx="3" ry="4" fill="#7C3AED"/>
+                <ellipse cx="40" cy="34" rx="3" ry="4" fill="#7C3AED"/>
+                <ellipse cx="32" cy="44" rx="5" ry="2.5" fill="#FFD6EC"/>
+                <ellipse cx="32" cy="38" rx="2" ry="1.2" fill="#FF6F91"/>
+            </svg>
+        </span>
+        <span class="star-sticker">
+            <svg viewBox="0 0 36 36" width="36" height="36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="18,3 22,14 34,14 24,21 28,33 18,26 8,33 12,21 2,14 14,14" fill="#FFB6B9" stroke="#fff" stroke-width="2"/>
+            </svg>
+        </span>
+        <h1>欢迎登录</h1>
+        <input id="nicknameInput" type="text" placeholder="请输入你的昵称">
+        <br>
+        <button id="loginBtn">登录</button>
+    </div>
+    <script>
+        document.getElementById('loginBtn').onclick = function() {
+            var nick = document.getElementById('nicknameInput').value.trim();
+            if (nick) {
+                localStorage.setItem('nickname', nick);
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('nicknameInput').focus();
+            }
+        };
+        document.getElementById('nicknameInput').addEventListener('keydown', function(e){
+            if(e.key==='Enter') document.getElementById('loginBtn').click();
+        });
+    </script>
+</body>
+</html> 

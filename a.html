@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发布帖子</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #F8E8EE; /* 柔和浅粉 */
+            --secondary-color: #D6E6F2; /* 柔和浅蓝紫 */
+            --accent-color: #FFF6E0; /* 柔和奶油黄 */
+            --light-color: #F3EFFF; /* 柔和淡紫 */
+            --blue-color: #D0E6F6; /* 柔和天蓝 */
+            --text-color: #A685E2;
+            --title-color: #B799FF;
+            --subtitle-color: #FEC260;
+            --btn-text-color: #fff;
+        }
+        body {
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 30%, var(--secondary-color) 60%, var(--blue-color) 85%, var(--light-color) 100%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 1.15rem;
+            font-weight: 500;
+        }
+        .container {
+            background-color: var(--light-color);
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px 30px 30px;
+            margin: 40px 0 30px 0;
+            width: 90%;
+            max-width: 800px;
+        }
+        h1 {
+            color: var(--title-color);
+            text-shadow: 2px 2px 8px #fff6b7, 0 2px 8px #ffd6ec, 0 0 2px #fff, 1px 1px 0px #b799ff;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 30px;
+            -webkit-text-stroke: 1px #fff6e0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            color: var(--subtitle-color);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: block;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            margin-bottom: 18px;
+            background: #fff;
+            color: var(--text-color);
+            box-sizing: border-box;
+            outline: none;
+            transition: border 0.2s;
+        }
+        input[type="text"]:focus, textarea:focus {
+            border: 2.5px solid var(--primary-color);
+        }
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 10px 0;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .btn {
+            background: linear-gradient(90deg, var(--primary-color), var(--blue-color));
+            color: var(--btn-text-color);
+            border: none;
+            padding: 14px 36px;
+            font-size: 1.2rem;
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(255,182,185,0.15);
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: linear-gradient(90deg, var(--secondary-color), var(--light-color));
+            color: var(--title-color);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 8px 20px rgba(255,182,185,0.25);
+        }
+        .post {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .post h2 {
+            color: var(--title-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .post p {
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+        .post img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+    <header style="position:relative;">
+      <!-- 可爱猫咪SVG装饰 -->
+      <div style="position:absolute;left:10px;top:10px;width:60px;height:60px;z-index:2;">
+        <svg viewBox="0 0 64 64" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="32" cy="40" rx="22" ry="18" fill="#FFD6EC"/>
+          <ellipse cx="20" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
+          <ellipse cx="44" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
+          <ellipse cx="32" cy="32" rx="18" ry="16" fill="#fff"/>
+          <ellipse cx="24" cy="34" rx="3" ry="4" fill="#7C3AED"/>
+          <ellipse cx="40" cy="34" rx="3" ry="4" fill="#7C3AED"/>
+          <ellipse cx="32" cy="44" rx="5" ry="2.5" fill="#FFD6EC"/>
+          <ellipse cx="32" cy="38" rx="2" ry="1.2" fill="#FF6F91"/>
+        </svg>
+      </div>
+    </header>
+    <div class="container" style="position:relative;">
+        <h1>发布新帖子</h1>
+        
+        <form id="postForm">
+            <div class="form-group">
+                <label for="title">标题</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="content">内容</label>
+                <textarea id="content" name="content" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="image">上传图片</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <div id="imagePreview"></div>
+            </div>
+            
+            <button type="submit" class="btn">发布帖子</button>
+        </form>
+        
+        <div id="postsContainer"></div>
+    </div>
+
+    <!-- 植物贴纸SVG装饰 -->
+    <div style="position:absolute;right:10px;bottom:10px;width:54px;height:54px;z-index:1;">
+      <svg viewBox="0 0 54 54" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="27" cy="44" rx="18" ry="8" fill="#B6E0FE"/>
+        <ellipse cx="17" cy="32" rx="6" ry="12" fill="#A3E4CB"/>
+        <ellipse cx="37" cy="32" rx="6" ry="12" fill="#A3E4CB"/>
+        <ellipse cx="27" cy="28" rx="7" ry="16" fill="#43B0F1"/>
+      </svg>
+    </div>
+
+    <script>
+        if (!localStorage.getItem('nickname')) {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const imageInput = document.getElementById('image');
+            
+            // 创建帖子元素
+            const postElement = document.createElement('div');
+            postElement.className = 'post';
+            
+            postElement.innerHTML = `
+                <h2>${title}</h2>
+                <p>${content.replace(/\n/g, '<br>')}</p>
+            `;
+            
+            // 如果有图片，添加到帖子中
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = '帖子图片';
+                    postElement.appendChild(img);
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            }
+            
+            // 添加到帖子容器
+            document.getElementById('postsContainer').prepend(postElement);
+            
+            // 重置表单
+            this.reset();
+            document.getElementById('imagePreview').innerHTML = '';
+        });
+        
+        // 图片预览功能
+        document.getElementById('image').addEventListener('change', function(e) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = '预览图片';
+                    img.className = 'preview-image';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
+</body>
+</html>

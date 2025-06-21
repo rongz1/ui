@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动漫风格照片转换器</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #F8E8EE; /* 柔和浅粉 */
+            --secondary-color: #D6E6F2; /* 柔和浅蓝紫 */
+            --accent-color: #FFF6E0; /* 柔和奶油黄 */
+            --light-color: #F3EFFF; /* 柔和淡紫 */
+            --blue-color: #D0E6F6; /* 柔和天蓝 */
+            --text-color: #FF6F91; /* 亮粉 */
+            --title-color: #7C3AED; /* 亮紫 */
+            --subtitle-color: #43B0F1; /* 亮蓝 */
+            --btn-text-color: #FFB86B; /* 亮橙 */
+            --input-text-color: #FF6F91; /* 亮粉 */
+        }
+        
+        body {
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 30%, var(--secondary-color) 60%, var(--blue-color) 85%, var(--light-color) 100%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 1.15rem;
+            font-weight: 500;
+        }
+        
+        header {
+            background: transparent;
+            width: 100%;
+            padding: 30px 0 10px 0;
+            text-align: center;
+            box-shadow: none;
+            margin-bottom: 20px;
+        }
+        
+        h1, h2, h3 {
+            color: var(--title-color);
+            text-shadow: 2px 2px 8px #fff6b7, 0 2px 8px #ffd6ec;
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+        h2, h3 {
+            color: var(--subtitle-color);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .container, .comment-section, .comments-display, .comment-item {
+            color: var(--text-color);
+            font-size: 1.15rem;
+            font-weight: 500;
+        }
+        .upload-btn, .convert-btn, .submit-btn, .nav-btn {
+            color: var(--btn-text-color) !important;
+            text-shadow: 1px 1px 6px #fff6b7;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        .upload-btn:hover, .convert-btn:hover, .submit-btn:hover, .nav-btn:hover {
+            color: var(--title-color) !important;
+        }
+        p, label, textarea, input, .comment-time {
+            color: var(--input-text-color);
+        }
+        
+        h1 {
+            margin: 0;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 800px;
+            background-color: var(--light-color);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .upload-section {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .upload-btn {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .upload-btn:hover {
+            background-color: #ffe066;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .upload-btn i {
+            margin-right: 10px;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .image-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .image-box {
+            width: 45%;
+            min-width: 300px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .image-box h3 {
+            color: #7C3AED;
+            font-weight: 800;
+            text-shadow: 1px 1px 6px #fff6e0, 0 0 2px #fff;
+            -webkit-text-stroke: 0.5px #fff6e0;
+            margin-bottom: 10px;
+        }
+        
+        .image-preview {
+            width: 100%;
+            height: 300px;
+            border: 3px dashed var(--accent-color);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .convert-btn {
+            background-color: var(--dark-color);
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        
+        .convert-btn:hover {
+            background-color: #ffe066;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .convert-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .comment-section {
+            width: 100%;
+            margin-top: 30px;
+        }
+        
+        .comment-section h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 100px;
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 15px;
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .submit-btn {
+            background-color: var(--secondary-color);
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .submit-btn:hover {
+            background-color: #ffd600;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading-spinner {
+            border: 5px solid var(--accent-color);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            width: 100%;
+            padding: 15px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+		.comments-display {
+		    width: 100%;
+		    margin-top: 30px;
+		    background-color: #fffbe7;
+		    border-radius: 15px;
+		    padding: 20px;
+		    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+		}
+		
+		.comments-display h3 {
+		    color: var(--primary-color);
+		    margin-top: 0;
+		    border-bottom: 2px dashed var(--accent-color);
+		    padding-bottom: 10px;
+		}
+		
+		.comment-item {
+		    background-color: #fffde7;
+		    border-radius: 10px;
+		    padding: 15px;
+		    margin-bottom: 15px;
+		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+		    position: relative;
+		}
+		
+		.comment-item:before {
+		    content: "";
+		    position: absolute;
+		    left: 15px;
+		    top: -10px;
+		    width: 0;
+		    height: 0;
+		    border-left: 10px solid transparent;
+		    border-right: 10px solid transparent;
+		    border-bottom: 10px solid white;
+		}
+		
+		.comment-time {
+		    font-size: 0.8rem;
+		    color: #999;
+		    margin-top: 5px;
+		    text-align: right;
+		}
+        
+        .message {
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .image-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .image-box {
+                width: 100%;
+            }
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            margin: 0 12px;
+            padding: 12px 32px;
+            font-size: 1.1rem;
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(90deg, var(--primary-color), var(--blue-color));
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(255,182,185,0.15);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+        .nav-btn:hover {
+            background: linear-gradient(90deg, var(--secondary-color), var(--light-color));
+            color: var(--text-color);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 8px 20px rgba(255,182,185,0.25);
+            text-decoration: none;
+        }
+        
+        .comment-section h2,
+        #commentsDisplay h3 {
+            color: #FF6F91 !important;
+            font-size: 2.2rem !important;
+            font-weight: 900 !important;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 8px #fff6e0, 0 2px 8px #ffd6ec, 0 0 2px #fff;
+            -webkit-text-stroke: 1px #fff6e0;
+            font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
+        }
+        .login-box {
+            background: var(--light-color);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 48px 36px 36px 36px;
+            max-width: 90vw;
+            width: 350px;
+            text-align: center;
+            position: relative;
+            margin: auto;
+            top: 10vh;
+        }
+        .cat-sticker {
+            position: absolute;
+            left: -30px;
+            top: -30px;
+            width: 60px;
+            height: 60px;
+        }
+        .star-sticker {
+            position: absolute;
+            right: -18px;
+            bottom: -18px;
+            width: 36px;
+            height: 36px;
+        }
+    </style>
+</head>
+<body>
+    <header style="position:relative;">
+      <!-- 可爱猫咪SVG装饰 -->
+      <div style="position:absolute;left:10px;top:10px;width:60px;height:60px;z-index:2;">
+        <svg viewBox="0 0 64 64" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="32" cy="40" rx="22" ry="18" fill="#FFD6EC"/>
+          <ellipse cx="20" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
+          <ellipse cx="44" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
+          <ellipse cx="32" cy="32" rx="18" ry="16" fill="#fff"/>
+          <ellipse cx="24" cy="34" rx="3" ry="4" fill="#7C3AED"/>
+          <ellipse cx="40" cy="34" rx="3" ry="4" fill="#7C3AED"/>
+          <ellipse cx="32" cy="44" rx="5" ry="2.5" fill="#FFD6EC"/>
+          <ellipse cx="32" cy="38" rx="2" ry="1.2" fill="#FF6F91"/>
+        </svg>
+      </div>
+      <h1><i class="fas fa-magic"></i> </h1>
+      <a href="a.html" class="nav-btn">发布帖子</a>
+      <a href="b.html" class="nav-btn">走失追踪</a>
+    </header>
+    
+    <!-- 登录盒子（未登录时显示） -->
+    <div id="loginBox" class="login-box" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.85);backdrop-filter:blur(2px);align-items:center;justify-content:center;">
+        <span class="cat-sticker">
+            <svg viewBox="0 0 64 64" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="32" cy="40" rx="22" ry="18" fill="#FFD6EC"/>
+                <ellipse cx="20" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
+                <ellipse cx="44" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
+                <ellipse cx="32" cy="32" rx="18" ry="16" fill="#fff"/>
+                <ellipse cx="24" cy="34" rx="3" ry="4" fill="#7C3AED"/>
+                <ellipse cx="40" cy="34" rx="3" ry="4" fill="#7C3AED"/>
+                <ellipse cx="32" cy="44" rx="5" ry="2.5" fill="#FFD6EC"/>
+                <ellipse cx="32" cy="38" rx="2" ry="1.2" fill="#FF6F91"/>
+            </svg>
+        </span>
+        <span class="star-sticker">
+            <svg viewBox="0 0 36 36" width="36" height="36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="18,3 22,14 34,14 24,21 28,33 18,26 8,33 12,21 2,14 14,14" fill="#FFB6B9" stroke="#fff" stroke-width="2"/>
+            </svg>
+        </span>
+        <h1>欢迎登录</h1>
+        <input id="nicknameInput" type="text" placeholder="请输入你的昵称">
+        <br>
+        <button id="loginBtn">登录</button>
+    </div>
+    
+    <div class="container" style="position:relative;">
+        <div class="message" id="message"></div>
+        
+        <div class="upload-section">
+            <input type="file" id="fileInput" accept="image/*">
+            <button class="upload-btn" id="uploadBtn">
+                <i class="fas fa-cloud-upload-alt"></i> 选择照片
+            </button>
+            <p>上传你的照片，我们将把它变成可爱的动漫风格！</p>
+        </div>
+        
+        <div class="image-container">
+            <div class="image-box">
+                <h3>原始照片</h3>
+                <div class="image-preview" id="originalPreview">
+                    <i class="fas fa-image" style="font-size: 50px; color: #ccc;"></i>
+                </div>
+            </div>
+            
+            <div class="image-box">
+                <h3>动漫效果</h3>
+                <div class="image-preview" id="cartoonPreview">
+                    <i class="fas fa-paint-brush" style="font-size: 50px; color: #ccc;"></i>
+                </div>
+            </div>
+        </div>
+        
+        <button class="convert-btn" id="convertBtn" disabled>
+            转换成动漫风格
+        </button>
+        
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>正在转换中，请稍候...</p>
+        </div>
+        
+        <div class="comment-section">
+            <h2><i class="fas fa-comment-dots"></i> 留下你的想法</h2>
+            <textarea id="commentInput" placeholder="我想对你说……"></textarea>
+            <button class="submit-btn" id="submitCommentBtn">提交留言</button>
+        </div>
+		<div class="comments-display" id="commentsDisplay">
+		    <h3 style="display:inline-flex;align-items:center;gap:8px;">
+		      <i class="fas fa-comments"></i> 留言板
+		      <!-- 爱心贴纸SVG -->
+		      <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;">
+		        <path d="M16 29s-9.5-6.7-12.2-11.2C1.2 14.2 2.2 9.7 6.2 8.2c2.7-1 5.2.2 6.8 2.2C14.8 7.2 17.3 6 20 8.2c4 1.5 5 6 2.4 9.6C25.5 22.3 16 29 16 29z" fill="#FF6F91" stroke="#fff" stroke-width="2"/>
+		      </svg>
+		    </h3>
+		    <div class="comments-list" id="commentsList">
+		        <!-- 留言将在这里动态显示 -->
+		    </div>
+		</div>
+    </div>
+    
+    <footer>
+    </footer>
+    
+    <script src="script.js"></script>
+    <script>
+    // 登录盒子逻辑
+    function showLoginBox() {
+      document.getElementById('loginBox').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    function hideLoginBox() {
+      document.getElementById('loginBox').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    function getNickname() {
+      return localStorage.getItem('nickname') || '';
+    }
+    function setNickname(nick) {
+      localStorage.setItem('nickname', nick);
+    }
+    // 页面加载时检测昵称
+    window.addEventListener('DOMContentLoaded', function() {
+      if (!getNickname()) {
+        showLoginBox();
+      } else {
+        hideLoginBox();
+      }
+    });
+    document.getElementById('loginBtn').onclick = function() {
+      var nick = document.getElementById('nicknameInput').value.trim();
+      if (nick) {
+        setNickname(nick);
+        hideLoginBox();
+      } else {
+        document.getElementById('nicknameInput').focus();
+      }
+    };
+    document.getElementById('nicknameInput').addEventListener('keydown', function(e){
+      if(e.key==='Enter') document.getElementById('loginBtn').click();
+    });
+    </script>
+    <script>
+    // 修改留言提交逻辑，带上昵称
+    const submitCommentBtn = document.getElementById('submitCommentBtn');
+    const commentInput = document.getElementById('commentInput');
+    const commentsList = document.getElementById('commentsList');
+    function getNickname() {
+      return localStorage.getItem('nickname') || '匿名';
+    }
+    function createCommentElement(comment) {
+      const div = document.createElement('div');
+      div.className = 'comment-item';
+      const time = new Date();
+      div.innerHTML = `<strong style="color:#7C3AED;">${getNickname()}：</strong>${comment}<div class="comment-time">${formatDate(time)}</div>`;
+      return div;
+    }
+    submitCommentBtn.onclick = function() {
+      const comment = commentInput.value.trim();
+      if (comment) {
+        const commentElement = createCommentElement(comment);
+        commentsList.insertBefore(commentElement, commentsList.firstChild);
+        commentInput.value = "";
+        showMessage("留言已提交!", "success");
+      } else {
+        showMessage("请输入留言内容!", "error");
+      }
+    };
+    </script>
+    <!-- 植物贴纸SVG装饰 -->
+    <div style="position:absolute;right:10px;bottom:10px;width:54px;height:54px;z-index:1;">
+      <svg viewBox="0 0 54 54" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="27" cy="44" rx="18" ry="8" fill="#B6E0FE"/>
+        <ellipse cx="17" cy="32" rx="6" ry="12" fill="#A3E4CB"/>
+        <ellipse cx="37" cy="32" rx="6" ry="12" fill="#A3E4CB"/>
+        <ellipse cx="27" cy="28" rx="7" ry="16" fill="#43B0F1"/>
+      </svg>
+    </div>
+</body>
+</html>
