@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>猫咪走失位置标记</title>
+    <title>登录</title>
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         :root {
-            --primary-color: #F8E8EE; /* 柔和浅粉 */
-            --secondary-color: #D6E6F2; /* 柔和浅蓝紫 */
-            --accent-color: #FFF6E0; /* 柔和奶油黄 */
-            --light-color: #F3EFFF; /* 柔和淡紫 */
-            --blue-color: #D0E6F6; /* 柔和天蓝 */
-            --text-color: #FF6F91; /* 亮粉 */
-            --title-color: #7C3AED; /* 亮紫 */
-            --subtitle-color: #43B0F1; /* 亮蓝 */
-            --btn-text-color: #FFB86B; /* 亮橙 */
+            --primary-color: #F8E8EE;
+            --secondary-color: #D6E6F2;
+            --accent-color: #FFF6E0;
+            --light-color: #F3EFFF;
+            --blue-color: #D0E6F6;
+            --text-color: #FF6F91;
+            --title-color: #7C3AED;
+            --btn-text-color: #FFB86B;
         }
         body {
             font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
@@ -28,77 +26,46 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 1.15rem;
-            font-weight: 500;
+            justify-content: center;
         }
-        .container {
-            background-color: var(--light-color);
-            border-radius: 20px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            padding: 40px 30px 30px 30px;
-            margin: 40px 0 30px 0;
-            width: 95%;
-            max-width: 1100px;
+        .login-box {
+            background: var(--light-color);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 48px 36px 36px 36px;
+            max-width: 90vw;
+            width: 350px;
+            text-align: center;
+            position: relative;
         }
         h1 {
             color: var(--title-color);
-            text-shadow: 2px 2px 8px #fff6b7, 0 2px 8px #ffd6ec, 0 0 2px #fff, 1px 1px 0px #b799ff;
-            font-size: 2.5rem;
-            font-weight: 800;
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 24px;
             letter-spacing: 2px;
-            text-align: center;
-            margin-bottom: 30px;
-            -webkit-text-stroke: 1px #fff6e0;
         }
-        .map-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .map-selector, .map-display, .instructions, .marker-info {
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            padding: 20px;
-        }
-        .map-display {
-            height: 500px;
-            position: relative;
-        }
-        #map {
-            height: 100%;
-            border-radius: 8px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            color: var(--subtitle-color);
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            display: block;
-        }
-        select, input, textarea {
+        input[type="text"] {
+            width: 90%;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 2px solid var(--primary-color);
             font-size: 1.1rem;
             font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
-            border-radius: 12px;
-            border: 2px solid var(--accent-color);
-            padding: 10px 14px;
-            margin-bottom: 12px;
+            margin-bottom: 22px;
+            outline: none;
             background: #fff;
             color: var(--text-color);
-            outline: none;
             transition: border 0.2s;
         }
-        select:focus, input:focus, textarea:focus {
-            border: 2.5px solid var(--primary-color);
+        input[type="text"]:focus {
+            border: 2.5px solid var(--title-color);
         }
         button {
             background: linear-gradient(90deg, var(--primary-color), var(--blue-color));
             color: var(--btn-text-color);
             border: none;
-            padding: 12px 36px;
+            padding: 14px 40px;
             font-size: 1.2rem;
             font-family: 'Baloo 2', 'Comic Neue', cursive, sans-serif;
             border-radius: 30px;
@@ -106,7 +73,6 @@
             font-weight: 700;
             box-shadow: 0 4px 12px rgba(255,182,185,0.15);
             transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
-            margin-top: 10px;
         }
         button:hover {
             background: linear-gradient(90deg, var(--secondary-color), var(--light-color));
@@ -114,254 +80,60 @@
             transform: translateY(-2px) scale(1.04);
             box-shadow: 0 8px 20px rgba(255,182,185,0.25);
         }
-        .marker-info {
-            display: none;
+        /* 可爱贴纸 */
+        .cat-sticker {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1000;
-            max-width: 300px;
+            left: -30px;
+            top: -30px;
+            width: 60px;
+            height: 60px;
         }
-        .cat-icon {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23ff72b6" d="M288 192h17.1c22.1 38.3 63.5 64 110.9 64c11 0 21.8-1.4 32-4v228c0 17.7-14.3 32-32 32s-32-14.3-32-32V339.2L248 448h56c17.7 0 32 14.3 32 32s-14.3 32-32 32H120c-17.7 0-32-14.3-32-32s14.3-32 32-32h56L96 339.2V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V252c10.2 2.6 21 4 32 4c47.3 0 88.7-25.7 110.9-64H160V192h32v-37.5c-11.3-5.9-22.2-12.9-32.4-20.9C130.7 122.4 96 135.2 96 160c0 17.7 14.3 32 32 32h32v-32c-17.7 0-32-14.3-32-32c0-12.4 7.1-23.4 17.2-29.7C94.1 91.8 64 96 64 96c8.7 17.9 20.3 34.3 33.6 48.7c-1.5 1.9-3.1 3.7-4.7 5.6c-27.9 32.4-44.8 71.1-49.9 112.1c-1.6 12.8-2.9 25.8-2.7 38.8c.1 3.3-2.6 6-5.9 6H5.9c-3.3 0-6-2.7-6-5.9c-.2-35.6 5.1-70.9 15.4-104.1c14-45.4 40.9-85.8 76.6-117C131.3 29.9 176.3 0 224 0h64c70.7 0 128 57.3 128 128v64z"/></svg>');
-            background-size: cover;
-            width: 40px;
-            height: 40px;
-        }
-        .instructions {
-            background-color: #fff6e0;
-            border-left: 4px solid #ffd6ec;
-        }
-        .instructions h3 {
-            color: var(--title-color);
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-        .marker-info h3 {
-            color: var(--title-color);
-            font-size: 1.2rem;
-            font-weight: 700;
+        .star-sticker {
+            position: absolute;
+            right: -18px;
+            bottom: -18px;
+            width: 36px;
+            height: 36px;
         }
     </style>
 </head>
 <body>
-    <div class="container" style="position:relative;">
-        <h1 style="display:inline-flex;align-items:center;gap:8px;">
-            猫咪走失位置标记
-            <!-- 爱心贴纸SVG -->
-            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;">
-              <path d="M16 29s-9.5-6.7-12.2-11.2C1.2 14.2 2.2 9.7 6.2 8.2c2.7-1 5.2.2 6.8 2.2C14.8 7.2 17.3 6 20 8.2c4 1.5 5 6 2.4 9.6C25.5 22.3 16 29 16 29z" fill="#FF6F91" stroke="#fff" stroke-width="2"/>
+    <div class="login-box">
+        <span class="cat-sticker">
+            <svg viewBox="0 0 64 64" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="32" cy="40" rx="22" ry="18" fill="#FFD6EC"/>
+                <ellipse cx="20" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
+                <ellipse cx="44" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
+                <ellipse cx="32" cy="32" rx="18" ry="16" fill="#fff"/>
+                <ellipse cx="24" cy="34" rx="3" ry="4" fill="#7C3AED"/>
+                <ellipse cx="40" cy="34" rx="3" ry="4" fill="#7C3AED"/>
+                <ellipse cx="32" cy="44" rx="5" ry="2.5" fill="#FFD6EC"/>
+                <ellipse cx="32" cy="38" rx="2" ry="1.2" fill="#FF6F91"/>
             </svg>
-        </h1>
-        
-        <!-- 可爱猫咪SVG装饰 -->
-        <div style="position:absolute;left:10px;top:10px;width:60px;height:60px;z-index:2;">
-          <svg viewBox="0 0 64 64" width="60" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="32" cy="40" rx="22" ry="18" fill="#FFD6EC"/>
-            <ellipse cx="20" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
-            <ellipse cx="44" cy="18" rx="8" ry="10" fill="#FFD6EC"/>
-            <ellipse cx="32" cy="32" rx="18" ry="16" fill="#fff"/>
-            <ellipse cx="24" cy="34" rx="3" ry="4" fill="#7C3AED"/>
-            <ellipse cx="40" cy="34" rx="3" ry="4" fill="#7C3AED"/>
-            <ellipse cx="32" cy="44" rx="5" ry="2.5" fill="#FFD6EC"/>
-            <ellipse cx="32" cy="38" rx="2" ry="1.2" fill="#FF6F91"/>
-          </svg>
-        </div>
-        
-        <div class="instructions">
-            <h3>使用说明：</h3>
-            <ol>
-                <li>从下拉菜单中选择您所在地区的地图</li>
-                <li>在地图上点击标记猫咪最后出现的位置</li>
-                <li>填写猫咪信息和联系方式</li>
-                <li>点击"保存标记"按钮保存位置</li>
-            </ol>
-        </div>
-        
-        <div class="map-container">
-            <div class="map-selector">
-                <div class="form-group">
-                    <label for="map-provider">选择地图服务：</label>
-                    <select id="map-provider">
-                        <option value="osm">OpenStreetMap (标准)</option>
-                        <option value="google">Google 地图</option>
-                        <option value="gaode">高德地图</option>
-                        <option value="baidu">百度地图</option>
-                        <option value="satellite">卫星地图</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="map-display">
-                <div id="map"></div>
-                <div class="marker-info" id="marker-info">
-                    <h3>猫咪走失信息</h3>
-                    <div class="form-group">
-                        <label for="cat-name">猫咪名字：</label>
-                        <input type="text" id="cat-name" placeholder="例如: 咪咪">
-                    </div>
-                    <div class="form-group">
-                        <label for="cat-color">猫咪颜色：</label>
-                        <input type="text" id="cat-color" placeholder="例如: 橘色">
-                    </div>
-                    <div class="form-group">
-                        <label for="lost-date">走失日期：</label>
-                        <input type="date" id="lost-date">
-                    </div>
-                    <div class="form-group">
-                        <label for="contact">联系方式：</label>
-                        <input type="text" id="contact" placeholder="电话或微信">
-                    </div>
-                    <div class="form-group">
-                        <label for="notes">补充信息：</label>
-                        <textarea id="notes" rows="3" placeholder="例如: 戴红色项圈, 胆小怕生"></textarea>
-                    </div>
-                    <button id="save-marker">保存标记</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 植物贴纸SVG装饰 -->
-        <div style="position:absolute;right:10px;bottom:10px;width:54px;height:54px;z-index:1;">
-          <svg viewBox="0 0 54 54" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="27" cy="44" rx="18" ry="8" fill="#B6E0FE"/>
-            <ellipse cx="17" cy="32" rx="6" ry="12" fill="#A3E4CB"/>
-            <ellipse cx="37" cy="32" rx="6" ry="12" fill="#A3E4CB"/>
-            <ellipse cx="27" cy="28" rx="7" ry="16" fill="#43B0F1"/>
-          </svg>
-        </div>
+        </span>
+        <span class="star-sticker">
+            <svg viewBox="0 0 36 36" width="36" height="36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="18,3 22,14 34,14 24,21 28,33 18,26 8,33 12,21 2,14 14,14" fill="#FFB6B9" stroke="#fff" stroke-width="2"/>
+            </svg>
+        </span>
+        <h1>欢迎登录</h1>
+        <input id="nicknameInput" type="text" placeholder="请输入你的昵称">
+        <br>
+        <button id="loginBtn">登录</button>
     </div>
-
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        // 初始化地图
-        let map;
-        let markers = [];
-        let currentMarker = null;
-        
-        function initMap() {
-            // 默认使用OpenStreetMap
-            map = L.map('map').setView([39.9042, 116.4074], 13); // 默认北京中心
-            
-            // 添加默认图层
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-            
-            // 点击地图事件
-            map.on('click', function(e) {
-                if (currentMarker) {
-                    map.removeLayer(currentMarker);
-                }
-                
-                // 添加猫咪图标标记
-                const catIcon = L.divIcon({
-                    className: 'cat-icon',
-                    iconSize: [40, 40]
-                });
-                
-                currentMarker = L.marker(e.latlng, {icon: catIcon}).addTo(map);
-                
-                // 显示信息表单
-                document.getElementById('marker-info').style.display = 'block';
-            });
-        }
-        
-        // 切换地图服务
-        document.getElementById('map-provider').addEventListener('change', function() {
-            const provider = this.value;
-            
-            // 移除所有现有图层
-            map.eachLayer(function(layer) {
-                if (layer._url) {
-                    map.removeLayer(layer);
-                }
-            });
-            
-            // 添加新图层
-            switch(provider) {
-                case 'osm':
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
-                    break;
-                case 'google':
-                    L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-                        attribution: 'Google Maps'
-                    }).addTo(map);
-                    break;
-                case 'gaode':
-                    L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
-                        subdomains: ['1', '2', '3', '4'],
-                        attribution: '高德地图'
-                    }).addTo(map);
-                    break;
-                case 'baidu':
-                    L.tileLayer('https://online{s}.map.bdimg.com/tile/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&udt=20210601', {
-                        subdomains: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
-                        attribution: '百度地图'
-                    }).addTo(map);
-                    break;
-                case 'satellite':
-                    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                        attribution: 'Satellite Imagery'
-                    }).addTo(map);
-                    break;
+        document.getElementById('loginBtn').onclick = function() {
+            var nick = document.getElementById('nicknameInput').value.trim();
+            if (nick) {
+                localStorage.setItem('nickname', nick);
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('nicknameInput').focus();
             }
+        };
+        document.getElementById('nicknameInput').addEventListener('keydown', function(e){
+            if(e.key==='Enter') document.getElementById('loginBtn').click();
         });
-        
-        // 保存标记
-        document.getElementById('save-marker').addEventListener('click', function() {
-            if (!currentMarker) return;
-            
-            const catName = document.getElementById('cat-name').value;
-            const catColor = document.getElementById('cat-color').value;
-            const lostDate = document.getElementById('lost-date').value;
-            const contact = document.getElementById('contact').value;
-            const notes = document.getElementById('notes').value;
-            
-            if (!catName || !contact) {
-                alert('请至少填写猫咪名字和联系方式');
-                return;
-            }
-            
-            // 创建弹出窗口内容
-            const popupContent = `
-                <h3>${catName || '无名猫咪'}</h3>
-                <p><strong>颜色:</strong> ${catColor || '未知'}</p>
-                <p><strong>走失日期:</strong> ${lostDate || '未知'}</p>
-                <p><strong>联系方式:</strong> ${contact}</p>
-                <p><strong>补充信息:</strong> ${notes || '无'}</p>
-            `;
-            
-            // 添加弹出窗口到标记
-            currentMarker.bindPopup(popupContent).openPopup();
-            
-            // 保存标记到数组
-            markers.push(currentMarker);
-            
-            // 重置表单
-            document.getElementById('marker-info').style.display = 'none';
-            document.getElementById('cat-name').value = '';
-            document.getElementById('cat-color').value = '';
-            document.getElementById('lost-date').value = '';
-            document.getElementById('contact').value = '';
-            document.getElementById('notes').value = '';
-            
-            // 提示用户
-            alert('猫咪走失位置已标记！');
-        });
-        
-        // 页面加载完成后初始化地图
-        window.onload = initMap;
-
-        if (!localStorage.getItem('nickname')) {
-            window.location.href = 'login.html';
-        }
     </script>
 </body>
-</html>
+</html> 
